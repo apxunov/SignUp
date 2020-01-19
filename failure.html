@@ -35,10 +35,12 @@
     <!-- Main jumbotron for a primary marketing message or call to action -->
   <div class="jumbotron">
     <div class="container">
-      <h1 class="display-3">Oh, no!</h1>
-      <p>Something went wrong!</p>
+        <h1 class="display-3">Oh, no!</h1>
+        <p>Something went wrong!</p>
+        <form action="/failure" method="POST">
+            <button class="btn btn-primary" type="submit" name="try-again">Try again</button>
+        </form>
     </div>
   </div>
-
 </body>
 </html>
