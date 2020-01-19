@@ -1,8 +1,19 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const request = require("request");
+const fs = require('file-system');
 
 const app = express();
+const auth = fs.readFileSync('auth.json', 'utf8');
+
+var auth_data = JSON.parse(auth);
+
+const me = auth_data.user;
+const url = auth_data.url;
+const apiKey = auth_data.API;
+const listID = auth_data.listID;
+const us = auth_data.us;
+
 
 // прокладываю путь к статичным файлам для отображения кастомных стилей: css/style.css на локальном сервере 
 app.use(express.static("public"));
@@ -16,11 +27,6 @@ app.post("/", function(req, res) {
     var name = req.body.inputName; // ищем по атрибуту name
     var surname = req.body.inputSurname;
     var email = req.body.inputEmail;
-
-    const apiKey = '582f0a4cb773e4369209e0a26a402a0b';
-    const listID = 'beafd3b5f1';
-    const us = 'us4';
-
     var data = {
         members: [
             {
@@ -33,15 +39,13 @@ app.post("/", function(req, res) {
             }
         ]
     };
-
     var JSONdata = JSON.stringify(data);
-
     var options = {
-        url: "https://" + us + ".api.mailchimp.com/3.0/lists/" + listID,
+        url: url,
         method: "POST",
         headers: { 
             // "Authorization": "apxunov " + apiKey + "-" + us // Во избежание ошибки 401 (Unauthorized) прописываем себя
-            "Authorization": "apxunov 582f0a4cb773e4369209e0a26a402a0b-us4"
+            "Authorization": me + apiKey + "-" + us
         },
         body: JSONdata
     };
