@@ -7,12 +7,14 @@ const app = express();
 const auth = fs.readFileSync('auth.json', 'utf8');
 
 var auth_data = JSON.parse(auth);
-
+// Секретную информацию прячу в JSON файл, прописывая его в .gitignore
 const me = auth_data.user;
 const url = auth_data.url;
 const apiKey = auth_data.API;
 const listID = auth_data.listID;
 const us = auth_data.us;
+
+console.log(auth_data)
 
 
 // прокладываю путь к статичным файлам для отображения кастомных стилей: css/style.css на локальном сервере 
@@ -40,17 +42,21 @@ app.post("/", function(req, res) {
         ]
     };
     var JSONdata = JSON.stringify(data);
+    console.log(JSONdata)
+
     var options = {
         url: url,
         method: "POST",
         headers: { 
             // "Authorization": "apxunov " + apiKey + "-" + us // Во избежание ошибки 401 (Unauthorized) прописываем себя
-            "Authorization": me + apiKey + "-" + us
+            "Authorization": me + " " + apiKey + "-" + us
         },
         body: JSONdata
     };
 
-    request(options, function(error, response, data){
+    console.log(options)
+
+    request(options, function(error, response, body){
         if (error) {
             res.sendFile(__dirname + "/failure.html")
         } else {
